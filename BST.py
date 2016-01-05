@@ -218,5 +218,11 @@ class TestBST(unittest.TestCase):
             self.BST.delete(a)
 	    _,p=self.BST.find_recursive(self.BST.root,a)
             self.assertEqual(p, None)
+    def testTraversal(self):
+        random.shuffle(self.seq)
+        for a in self.seq:
+            self.BST.insert(a)
+        self.seq.sort()
+        self.assertEqual(self.BST.traversal(2), self.seq)
 
 if __name__ == '__main__': unittest.main()
