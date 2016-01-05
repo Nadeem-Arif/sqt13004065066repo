@@ -22,8 +22,10 @@ class BST:
         @param key: a key value
         @return: the node with the key; Null if the key is not found
         """
-        if None == node or key == node.key:
-            return node
+	if(node==None):
+	    return None,None
+        elif key == node.key:
+            return node,key
         elif key < node.key:
             return self.find_recursive(node.left, key)
         else:
@@ -35,7 +37,8 @@ class BST:
         @param key: the target key
         @return: the node with the key; null if the key is not found
         """
-        return self.find_recursive(self.root, key)
+	node,_=self.find_recursive(self.root, key)
+        return node
     def insert(self, key):
         """
         Insert the (key, value) to the BST
@@ -122,67 +125,89 @@ class BST:
 	else:
 	    print"node not found"
 
-    def preorder(self, node):
+    def preorder(self, node,L):
         if node != None:
+	    L.append(node.key)
             print node.key
-            self.preorder(node.left)
-            self.preorder(node.right)
+            self.preorder(node.left,L)
+            self.preorder(node.right,L)
 
     # recursive method for inorder traversal
-    def inorder(self, node):
+    def inorder(self, node,L):
         if node != None:
-            self.inorder(node.left)
-            print node.key
-            self.inorder(node.right)
-
-    def postorder(self, node):
-        if node != None:
-            self.inorder(node.left)
-            self.inorder(node.right)
+            self.inorder(node.left,L)
+            L.append(node.key)
 	    print node.key
+            self.inorder(node.right,L)
+
+    def postorder(self, node,L):
+        if node != None:
+            self.inorder(node.left,L)
+            self.inorder(node.right,L)
+	    print node.key
+	    L.append(node.key)
     def traversal(self,choice):
+	L=[]
         if choice == 1:
-            self.preorder(self.root)
+            self.preorder(self.root,L)
         elif choice == 2:
-            self.inorder(self.root)
+            self.inorder(self.root,L)
         elif choice == 3:
-            self.postorder(self.root)
+            self.postorder(self.root,L)
+	return L
     def isempty(self):
 	if(root==None):
 	    return False
 	else:
 	    return True
+
 tree=BST()
 while(1):	
     choice = input("press 1 to insert in bst\npress 2 to delete from bst\npress 3 for preorder traversal \npress 4 for inorder traversal\npress 5 for postorder traversal\npress 6 to search a node\npress 7 to check whether BST is empty or no?\npress 8 to exit")
     if(choice==1):
         number=input("enter the number to insert in BST")
         if(tree.insert(number)==True):
-	    print"add successfully"
+            print"add successfully"
         else:
 	    print"adding not success"
     elif(choice==2):
         number=input("enter the number to delete node in BST")
         tree.delete(number)
     elif(choice==3):
-	print"preorder"
+        print"preorder"
         tree.traversal(1)
     elif(choice==4):
-	print"inorder"
+        print"inorder"
         tree.traversal(2)
     elif(choice==5):
-	print"postorder"
+        print"postorder"
         tree.traversal(3)
     elif(choice==6):
         number=input("enter the number to search in BST")
         if(tree.search(number)!=None):
             print"node found"
         else:
-	    print"node not found"
+            print"node not found"
     elif(choice==7):
-	if(tree.root==None):
-	    print"Empty"
-	else:
-	    print"Not Empty"
+        if(tree.root==None):
+            print"Empty"
+        else:
+            print"Not Empty"
     elif(choice==8):
-	exit(1)
+        break
+
+import unittest
+import random
+
+class TestBST(unittest.TestCase):
+    def setUp(self):
+        self.BST = BST()
+        self.seq = range(10)
+    def testinsertion(self):
+        random.shuffle(self.seq)
+        for a in self.seq:
+            self.BST.insert(a)
+	    _,p=self.BST.find_recursive(self.BST.root,a)
+            self.assertEqual(p, a)
+
+if __name__ == '__main__': unittest.main()
