@@ -209,5 +209,14 @@ class TestBST(unittest.TestCase):
             self.BST.insert(a)
 	    _,p=self.BST.find_recursive(self.BST.root,a)
             self.assertEqual(p, a)
+    def testdeletion_Search(self):
+	random.shuffle(self.seq)
+        for a in self.seq:
+	    self.BST.insert(a)
+	    _,p=self.BST.find_recursive(self.BST.root,a)
+	    self.assertEqual(p, a)
+            self.BST.delete(a)
+	    _,p=self.BST.find_recursive(self.BST.root,a)
+            self.assertEqual(p, None)
 
 if __name__ == '__main__': unittest.main()
